@@ -1,0 +1,9 @@
+[submodule "server"]
+	path = server
+	url = https://github.com/whr819987540/server.git
+[submodule "torrent"]
+	path = torrent
+	url = git@github.com:whr819987540/torrent.git
+[submodule "torrent_cmd"]
+	path = torrent_cmd
+	url = git@github.com:whr819987540/torrent_cmd.git
