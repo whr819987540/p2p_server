@@ -1,9 +1,0 @@
-{
-    "enabled": true,
-    "path": "/usr/local", // 注释1
-    "first": {
-        "second": "third",
-        // 注释2
-        "inner": "outer"
-    }
-}
