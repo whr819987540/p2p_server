@@ -6,4 +6,4 @@
 	url = git@github.com:whr819987540/torrent.git
 [submodule "rpc"]
 	path = rpc
-	url = https://github.com/rpc.git
+	url = https://github.com/whr819987540/rpc.git
