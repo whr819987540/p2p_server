@@ -5,3 +5,4 @@ go.work
 .torrent.db-shm
 .torrent.db-wal
 *.torrent
+__pycache__
