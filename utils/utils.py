@@ -110,7 +110,7 @@ def get_datetime_str():
     return datetime.strftime(datetime.now(), "%Y_%m_%d_%H_%M_%S")
 
 
-def load_dataset(args: argparse.Namespace, dataset: str, data_dir: str, batch_size: int,):
+def load_dataset(dataset: str, data_dir: str, batch_size: int,):
     if dataset == "mnist":
         # 定义数据预处理方式
         transform = transforms.ToTensor()
