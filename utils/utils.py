@@ -74,9 +74,7 @@ def get_logger(args, name):
     return logger
 
 
-def update_config_file(master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
-    RANK = dist.get_rank()
-
+def update_config_file(RANK, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
     current_path = os.path.abspath(__file__)
     current_path = os.path.dirname(current_path)
     current_path = os.path.dirname(current_path)
@@ -92,7 +90,7 @@ def update_config_file(master_addr: str, master_port: int, model: str, dataset: 
             config['model']['ModelPath'], model, dataset, get_datetime_str())
         with open(json_config_path, 'w') as f:
             f.write(json.dumps(config))
-            
+
         # DONE: transfer the updated config.json instead of relying on NFS
         config_json = json.dumps(config)
         config_bytes = config_json.encode()
@@ -113,7 +111,7 @@ def update_config_file(master_addr: str, master_port: int, model: str, dataset: 
         config_json = config_bytes.decode()
         config = json.loads(config_json)
         config = to_namespace(config)
-        
+
     logger.info(f"config {config}")
     logger.info(
         f"master_addr {config.server.ServerIP}:{config.server.ServerPort}, model_root_dir {config.model.ModelPath}")
@@ -348,7 +346,8 @@ if __name__ == "__main__":
     logger = get_logger(args, "test")
     logger.info("test")
 
-    train_dataset, train_dataloader, test_dataset, test_dataloader = load_dataset(args.dataset, args.data_dir, args.batch_size)
+    train_dataset, train_dataloader, test_dataset, test_dataloader = load_dataset(
+        args.dataset, args.data_dir, args.batch_size)
 
     # print(train_dataset)
     # print(test_dataset)
