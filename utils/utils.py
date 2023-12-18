@@ -92,15 +92,29 @@ def update_config_file(master_addr: str, master_port: int, model: str, dataset: 
             config['model']['ModelPath'], model, dataset, get_datetime_str())
         with open(json_config_path, 'w') as f:
             f.write(json.dumps(config))
+            
+        # DONE: transfer the updated config.json instead of relying on NFS
+        config_json = json.dumps(config)
+        config_bytes = config_json.encode()
+        config_tensor = torch.from_numpy(numpy.frombuffer(config_bytes, numpy.uint8))
+        # size
+        dist.broadcast(torch.tensor([config_tensor.shape[0]], dtype=torch.int64), 0)
+        # data
+        dist.broadcast(config_tensor, 0)
         config = to_namespace(config)
-
-    # make sure all clients read the same config.json
-    dist.barrier()
-
-    if RANK != 0:
-        # TODO: this file synchronization is based on NFS
-        config = loadConfig(os.path.join(current_path,  "rpc", "rpc_server", "config.json"))
-
+    else:
+        # size
+        config_size = torch.empty(1, dtype=torch.int64)
+        dist.broadcast(config_size, 0)
+        # data
+        config_tensor = torch.empty(config_size[0], dtype=torch.uint8)
+        dist.broadcast(config_tensor, 0)
+        config_bytes = config_tensor.numpy().tobytes()
+        config_json = config_bytes.decode()
+        config = json.loads(config_json)
+        config = to_namespace(config)
+        
+    logger.info(f"config {config}")
     logger.info(
         f"master_addr {config.server.ServerIP}:{config.server.ServerPort}, model_root_dir {config.model.ModelPath}")
     return config
