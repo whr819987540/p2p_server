@@ -82,8 +82,6 @@ def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model:
         
         return the updated dict object and the path of the updated json file
     """
-    assert RANK == 0
-    
     current_path = os.path.abspath(__file__)
     current_path = os.path.dirname(current_path)
     current_path = os.path.dirname(current_path)
