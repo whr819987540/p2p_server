@@ -74,6 +74,33 @@ def get_logger(args, name):
     return logger
 
 
+def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model: str, dataset: str):
+    """
+        load dict object from jsonc
+        
+        update the dict object by params and datetime
+        
+        return the updated dict object and the path of the updated json file
+    """
+    assert RANK == 0
+    
+    current_path = os.path.abspath(__file__)
+    current_path = os.path.dirname(current_path)
+    current_path = os.path.dirname(current_path)
+
+    jsonc_config_path = os.path.join(current_path, "rpc", "rpc_server", "config.jsonc")
+    json_config_path = os.path.join(current_path, "rpc", "rpc_server", "config.json")
+
+    # update config.json according to the datetime
+    config = json.loads(readJsonc(jsonc_config_path))
+    config['server']['ServerIP'] = master_addr
+    config['server']['ServerPort'] = int(master_port)
+    config['model']['ModelPath'] = os.path.join(
+        config['model']['ModelPath'], model, dataset, get_datetime_str())
+
+    return config, json_config_path
+
+
 def update_config_file(RANK, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
     current_path = os.path.abspath(__file__)
     current_path = os.path.dirname(current_path)
