@@ -101,7 +101,7 @@ def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model:
     return config, json_config_path
 
 
-def update_config_file(RANK, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
+def update_config_file(RANK: int, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
     if RANK == 0:
         config, json_config_path = get_updated_config_file(RANK, master_addr, master_port, model, dataset)
         with open(json_config_path, 'w') as f:
