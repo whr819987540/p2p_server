@@ -102,19 +102,8 @@ def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model:
 
 
 def update_config_file(RANK, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
-    current_path = os.path.abspath(__file__)
-    current_path = os.path.dirname(current_path)
-    current_path = os.path.dirname(current_path)
-
-    jsonc_config_path = os.path.join(current_path, "rpc", "rpc_server", "config.jsonc")
-    json_config_path = os.path.join(current_path, "rpc", "rpc_server", "config.json")
     if RANK == 0:
-        # update config.json according to the datetime
-        config = json.loads(readJsonc(jsonc_config_path))
-        config['server']['ServerIP'] = master_addr
-        config['server']['ServerPort'] = int(master_port)
-        config['model']['ModelPath'] = os.path.join(
-            config['model']['ModelPath'], model, dataset, get_datetime_str())
+        config, json_config_path = get_updated_config_file(RANK, master_addr, master_port, model, dataset)
         with open(json_config_path, 'w') as f:
             f.write(json.dumps(config))
 
