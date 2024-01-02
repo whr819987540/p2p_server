@@ -20,7 +20,8 @@ from p2p_server.utils.my_model import LeNet
 
 model_dict = {"resnet18": models.resnet18, "resnet34": models.resnet34,
               "resnet50": models.resnet50, "resnet101": models.resnet101, "resnet152": models.resnet152, "lenet": LeNet}
-
+SIMULATION_MODE = "simulation"
+STANDALONE_MODE = "standalone"
 
 def get_args():
     parser = argparse.ArgumentParser(description="Train models on Imagenette under ASGD")
@@ -46,6 +47,8 @@ def get_args():
                         help="debug level: NOTSET, DEBUG, INFO, WARNING, ERROR, FATAL, CRITICAL")
     parser.add_argument("--aggregate_frequency", type=int, default=5,
                         help="aggregate the gradients every certain number of iterations in one epoch")
+    parser.add_argument("--mode", type=str, default=SIMULATION_MODE,
+                        help="set the running mode. simulation and standalone are available.")
 
     args = parser.parse_args()
 
