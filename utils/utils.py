@@ -95,6 +95,12 @@ def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model:
     config['server']['ServerPort'] = int(master_port)
     config['model']['ModelPath'] = os.path.join(
         config['model']['ModelPath'], model, dataset, get_datetime_str())
+    if os.environ.get('StackName'):
+        config['tracker']['URLList'] = [
+            [
+                f"udp://{os.environ['StackName']}_tracker:6969/announce",
+            ],
+        ]
 
     return config, json_config_path
 
