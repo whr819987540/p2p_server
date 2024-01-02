@@ -7,6 +7,7 @@ import numpy
 import json
 import logging
 import pickle
+from scipy import stats
 
 from datetime import datetime
 from torchvision import models
@@ -368,6 +369,36 @@ def set_seed(seed: int = 0):
     numpy.random.seed(seed)
 
 
+def GetPearsonCorrelationCoefficient():
+    data = load_client_profile()
+    computation = []
+    communication = []
+    for value in data.values():
+        computation.append(value['computation'])
+        communication.append(value['communication'])
+
+    # Pearson correlation coefficient: 0.0024169218848259294
+    # P-value: 0.08744723051476527
+    correlation, p_value = stats.pearsonr(computation, communication)
+    print("Pearson correlation coefficient:", correlation)
+    print("P-value:", p_value)
+
+
+def GetSpearmanCorrelationCoefficient():
+    data = load_client_profile()
+    computation = []
+    communication = []
+    for value in data.values():
+        computation.append(value['computation'])
+        communication.append(value['communication'])
+
+    # Spearman correlation coefficient: 0.003023359711877614
+    # P-value: 0.03252991845126464
+    correlation, p_value = stats.spearmanr(computation, communication)
+    print("Spearman correlation coefficient:", correlation)
+    print("P-value:", p_value)
+
+
 def load_client_profile():
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "client_device_capacity")
@@ -387,6 +418,13 @@ def load_client_profile():
     # # 8 {'computation': 44.0, 'communication': 42360.068898122656}
     # # 3463 {'computation': 21.0, 'communication': 11154.383933690891}
     # # 34635 {'computation': 82.0, 'communication': 82504.44631466508}
+
+    # GetPearsonCorrelationCoefficient()
+    # # Pearson correlation coefficient: 0.0024169218848259294
+    # # P-value: 0.08744723051476527
+    # GetSpearmanCorrelationCoefficient()
+    # # Pearson correlation coefficient: 0.003023359711877614
+    # # P-value: 0.03252991845126464
 
     return res
 
