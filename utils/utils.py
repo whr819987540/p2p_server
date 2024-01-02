@@ -29,8 +29,12 @@ def get_args():
     parser.add_argument("--rank", type=int, default=1, help="Global rank of this process.")
     parser.add_argument("--world_size", type=int, default=3,
                         help="Total number of workers including the parameter server and clients.")
+    default_data_dir = os.path.dirname(os.path.abspath(__file__))
+    default_data_dir = os.path.dirname(default_data_dir)
+    default_data_dir = os.path.dirname(default_data_dir)
+    default_data_dir = os.path.join(default_data_dir, "data")
     parser.add_argument("--data_dir", type=str,
-                        default="/home/whr/code/communication/data", help="The location of dataset.")
+                        default=default_data_dir, help="The location of dataset.")
     parser.add_argument("--dataset", type=str,
                         default="cifar10", help="Dataset.")
     parser.add_argument("--num_classes", type=int,
