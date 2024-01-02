@@ -6,6 +6,7 @@ import os
 import numpy
 import json
 import logging
+import pickle
 
 from datetime import datetime
 from torchvision import models
@@ -365,6 +366,29 @@ def set_seed(seed: int = 0):
     torch.cuda.manual_seed(seed)
     random.seed(seed)
     numpy.random.seed(seed)
+
+
+def load_client_profile():
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "client_device_capacity")
+    with open(path, "rb") as f:
+        res = pickle.load(f)
+
+    # # 500000
+    # print(len(res))
+
+    # keys = [1, 4,5,7,8,3463,34635]
+    # for key in keys:
+    #     print(key,res[key])
+    # # 1 {'computation': 153.0, 'communication': 2209.615982329485}
+    # # 4 {'computation': 149.0, 'communication': 13507.696000153657}
+    # # 5 {'computation': 29.0, 'communication': 6924.407283130328}
+    # # 7 {'computation': 176.0, 'communication': 32545.573620752573}
+    # # 8 {'computation': 44.0, 'communication': 42360.068898122656}
+    # # 3463 {'computation': 21.0, 'communication': 11154.383933690891}
+    # # 34635 {'computation': 82.0, 'communication': 82504.44631466508}
+
+    return res
 
 
 if __name__ == "__main__":
