@@ -77,6 +77,8 @@ def get_args():
                         help="use client selection or not. Default is False.")
     parser.add_argument("--selected_clients_number", type=int, default=-1,
                         help="number of selected clients in each iteration.")
+    parser.add_argument("--selected_clients_proportion", type=float, default=0,
+                        help="proportion of selected clients in each iteration.")
 
     args = parser.parse_args()
 
