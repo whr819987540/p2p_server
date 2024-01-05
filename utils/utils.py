@@ -53,7 +53,8 @@ def get_args():
                         help="debug level: NOTSET, DEBUG, INFO, WARNING, ERROR, FATAL, CRITICAL")
     parser.add_argument("--aggregate_frequency", type=int, default=5,
                         help="aggregate the gradients every certain number of iterations in one epoch")
-    parser.add_argument("--running_mode", type=str, default=SIMULATION_MODE,
+    parser.add_argument("--running_mode", type=str, default=SIMULATION_MODE, 
+                        choices=[SIMULATION_MODE, STANDALONE_MODE],
                         help="set the running mode. simulation and standalone are available.")
 
     args = parser.parse_args()
