@@ -470,6 +470,23 @@ def load_client_profile():
     return res
 
 
+def python_object_to_tensor(data, reverse=False):
+    """
+        python object and torch.Tensor are transformed into each other.
+    """
+    if not reverse:
+        # python object to pytorch tensor
+        data_bytes = pickle.dumps(data)
+        data_tensor = torch.from_numpy(numpy.frombuffer(data_bytes, numpy.uint8))
+        return data_tensor
+    else:
+        # python object to pytorch tensor
+        assert type(data) is torch.Tensor
+        data_bytes = data.numpy().tobytes()
+        data_object = pickle.loads(data_bytes)
+        return data_object
+
+
 if __name__ == "__main__":
     args = get_args()
     print(args)
