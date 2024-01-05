@@ -75,6 +75,8 @@ def get_args():
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
     parser.add_argument("--client_selection", type=str2bool, default=False,
                         help="use client selection or not. Default is False.")
+    parser.add_argument("--selected_clients_number", type=int, default=-1,
+                        help="number of selected clients in each iteration.")
 
     args = parser.parse_args()
 
