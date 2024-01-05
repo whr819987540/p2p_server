@@ -28,6 +28,17 @@ STANDALONE_MODE = "standalone"
 BTPS_TRANSFER_MODE = "BTPS"
 PS_TRANSFER_MODE = "PS"
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentError(None, 'Value should be true/false, True/False or yes/no.')
+
+
 def get_args():
     parser = argparse.ArgumentParser(description="Train models on Imagenette under ASGD")
     parser.add_argument("--model", type=str, default="resnet18", help="The job's name.")
@@ -62,6 +73,8 @@ def get_args():
     parser.add_argument("--transfer_mode", type=str, default=BTPS_TRANSFER_MODE, 
                         choices=[BTPS_TRANSFER_MODE, PS_TRANSFER_MODE],
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
+    parser.add_argument("--client_selection", type=str2bool, default=False,
+                        help="use client selection or not. Default is False.")
 
     args = parser.parse_args()
 
