@@ -25,6 +25,9 @@ model_dict = {"resnet18": models.resnet18, "resnet34": models.resnet34,
 SIMULATION_MODE = "simulation"
 STANDALONE_MODE = "standalone"
 
+BTPS_TRANSFER_MODE = "BTPS"
+PS_TRANSFER_MODE = "PS"
+
 def get_args():
     parser = argparse.ArgumentParser(description="Train models on Imagenette under ASGD")
     parser.add_argument("--model", type=str, default="resnet18", help="The job's name.")
@@ -56,6 +59,9 @@ def get_args():
     parser.add_argument("--running_mode", type=str, default=SIMULATION_MODE, 
                         choices=[SIMULATION_MODE, STANDALONE_MODE],
                         help="set the running mode. simulation and standalone are available.")
+    parser.add_argument("--transfer_mode", type=str, default=BTPS_TRANSFER_MODE, 
+                        choices=[BTPS_TRANSFER_MODE, PS_TRANSFER_MODE],
+                        help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
 
     args = parser.parse_args()
 
