@@ -39,6 +39,22 @@ def str2bool(v):
         raise argparse.ArgumentError(None, 'Value should be true/false, True/False or yes/no.')
 
 
+def check_args(args):
+    if args.client_selection:
+        if args.selected_clients_number == -1 and args.selected_clients_proportion == 0:
+            raise argparse.ArgumentError(None, "When using client selection, the number of selected clients in each iteration must be set manually.")
+        # This if-else means selected_clients_number has higher priority than selected_clients_proportion.
+        if args.selected_clients_number >= 1:
+            pass
+        else:
+            args.selected_clients_number = int(args.selected_clients_proportion * (args.world_size - 1))
+    else:
+        args.selected_clients_number = args.world_size - 1
+
+    if args.selected_clients_number < 1 or args.selected_clients_number > args.world_size - 1:
+        raise argparse.ArgumentError(None, "Check selected_clients_number and selected_clients_proportion again.")
+
+
 def get_args():
     parser = argparse.ArgumentParser(description="Train models on Imagenette under ASGD")
     parser.add_argument("--model", type=str, default="resnet18", help="The job's name.")
@@ -81,6 +97,7 @@ def get_args():
                         help="proportion of selected clients in each iteration.")
 
     args = parser.parse_args()
+    check_args(args)
 
     return args
 
