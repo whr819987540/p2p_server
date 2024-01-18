@@ -94,7 +94,8 @@ def get_args():
                         help="number of selected clients in each iteration.")
     parser.add_argument("--selected_clients_proportion", type=float, default=0,
                         help="proportion of selected clients in each iteration.")
-
+    parser.add_argument("--use_gpu", type=str2bool, default=False,
+                        help="use gpu or not. Default is False. In simulation mode, it's better to use cpu to simulate more clients as gpu memory is smaller than host memory.")
     args = parser.parse_args()
     check_args(args)
 
