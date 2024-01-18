@@ -82,7 +82,7 @@ def load_mnist(data_dir: str, args):
             download=True,
             transform=transform)
     else:    
-        iid = False
+        iid = args.mnist_iid
         shard_size = args.shard_size
         num_clients = WORLD_SIZE - 1
         dtype = torch.int

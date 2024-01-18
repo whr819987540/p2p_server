@@ -100,6 +100,10 @@ def get_args():
         "--shard_size", type=int, default=300, 
         help="Only valid when using MNIST dataset."
     )
+    parser.add_argument(
+        "--mnist_iid", type=str2bool, default=False, 
+        help="Use iid or non-iid MNIST dataset. Only valid when using MNIST dataset."
+    )
     args = parser.parse_args()
     check_args(args)
 
