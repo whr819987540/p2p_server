@@ -66,7 +66,7 @@ def get_mnist_data(datadir):
     return train_img, train_label, test_img, test_label
 
 
-def load_mnist(data_dir: str):
+def load_mnist(data_dir: str, args):
     fed = True
     RANK, WORLD_SIZE = dist.get_rank(), dist.get_world_size()
     if not fed:
@@ -83,7 +83,7 @@ def load_mnist(data_dir: str):
             transform=transform)
     else:    
         iid = False
-        shard_size = 200
+        shard_size = args.shard_size
         num_clients = WORLD_SIZE - 1
         dtype = torch.int
         

@@ -59,13 +59,13 @@ class SplitedDataset:
         train_sorted_index = torch.argsort(train_label)
 
 
-def load_dataset(dataset: str, data_dir: str, batch_size: int):
+def load_dataset(dataset: str, data_dir: str, batch_size: int, args):
     train_shuffle = True
     test_shuffle = False
     
     if dataset == "mnist":
         # train_dataset, test_dataset = load_mnist(data_dir, indices)
-        train_dataset, test_dataset = load_mnist(data_dir)
+        train_dataset, test_dataset = load_mnist(data_dir, args)
     elif dataset == "imagenette2":
         # prepare dataset
         normalize = transforms.Normalize(

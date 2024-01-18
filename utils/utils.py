@@ -96,6 +96,10 @@ def get_args():
                         help="proportion of selected clients in each iteration.")
     parser.add_argument("--use_gpu", type=str2bool, default=False,
                         help="use gpu or not. Default is False. In simulation mode, it's better to use cpu to simulate more clients as gpu memory is smaller than host memory.")
+    parser.add_argument(
+        "--shard_size", type=int, default=300, 
+        help="Only valid when using MNIST dataset."
+    )
     args = parser.parse_args()
     check_args(args)
 
