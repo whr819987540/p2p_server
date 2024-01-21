@@ -108,6 +108,10 @@ def get_args():
         "--mnist_iid", type=str2bool, default=False, 
         help="Use iid or non-iid MNIST dataset. Only valid when using MNIST dataset."
     )
+    parser.add_argument(
+        "--rate_limit", type=str2bool, default=False, 
+        help="In simulation mode, whether to limit the upload and download rate. If it's True, the rate will be determined by the client's profile. It's only valid in simulation mode."
+    )
     args = parser.parse_args()
     check_args(args)
 
