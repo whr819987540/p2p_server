@@ -379,6 +379,13 @@ def python_object_to_tensor(data, reverse=False):
         return data_object
 
 
+def calculate_statistical_utility(losses: torch.Tensor, sample_number) -> float:
+    """
+        $|B_i| \sqrt {\\frac {1}{|B_i|} \sum _{k\in{B_i}} {LOSS(k)^2}}$
+    """
+    return sample_number * torch.sqrt(torch.sum(torch.pow(losses, 2)) / losses.shape[0]).item()
+
+
 if __name__ == "__main__":
     args = get_args()
     print(args)
