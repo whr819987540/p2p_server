@@ -352,6 +352,16 @@ def load_client_profile():
     return res
 
 
+def generate_client_profiles(world_size:int):
+    client_profile = load_client_profile()
+    res = []
+    # server's profile is included.
+    for index in random.sample(range(1, len(client_profile)), world_size):
+        res.append(client_profile[index])
+
+    return res
+
+
 def python_object_to_tensor(data, reverse=False):
     """
         python object and torch.Tensor are transformed into each other.
