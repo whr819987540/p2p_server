@@ -77,6 +77,7 @@ def get_args():
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size of each worker during training.")
     parser.add_argument("--lr", type=float, default=0.01, help="Learning rate.")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of epochs.")
+    parser.add_argument("--local_epoch", type=int, default=1, help="Number of local epochs.")
     parser.add_argument("--seed", type=int, default=0, help="random seed.")
     parser.add_argument("--num_evaluate_threads", type=int, default=1,
                         help="parameter server uses certain number of threads to evaluate the model.")
