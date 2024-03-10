@@ -112,6 +112,10 @@ def get_args():
         "--exploration_proportion_min", type=float, default=0.2,
         help="After each round, exploration_proportion decays. But it will not be smaller than exploration_proportion_min. It's only valid in oort."
     )
+    parser.add_argument(
+        "--cut_off_util", type=float, default=0.05,
+        help="Make the selection boundary wider. Oort doesn't simply select top K and it uses probability to select from a range. It's only valid in oort."
+    )
     parser.add_argument("--use_gpu", type=str2bool, default=False,
                         help="use gpu or not. Default is False. In simulation mode, it's better to use cpu to simulate more clients as gpu memory is smaller than host memory.")
     parser.add_argument(
