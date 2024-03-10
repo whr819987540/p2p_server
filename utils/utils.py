@@ -23,6 +23,7 @@ PS_TRANSFER_MODE = "PS"
 
 FEDAVG_STRATEGY = "fedavg" # random selection
 OORT_STRATEGY = "oort"
+FedP2P_STRATEGY = "fedp2p"
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -94,7 +95,7 @@ def get_args():
     parser.add_argument("--client_selection", type=str2bool, default=False,
                         help="use client selection or not. Default is False.")
     parser.add_argument("--client_selection_strategy", type=str, default="fedavg",
-                        choices=[FEDAVG_STRATEGY, OORT_STRATEGY],
+                        choices=[FEDAVG_STRATEGY, OORT_STRATEGY, FedP2P_STRATEGY],
                         help="client selection strategy. Default is fedavg.")
     parser.add_argument("--selected_clients_number", type=int, default=-1,
                         help="number of selected clients in each iteration.")
