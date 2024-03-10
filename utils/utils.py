@@ -27,12 +27,17 @@ OORT_STRATEGY = "oort"
 def str2bool(v):
     if isinstance(v, bool):
         return v
+    while True:
+        if v.startswith('='):
+            v = v[1:]
+        else:
+            break
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
     elif v.lower() in ('no', 'false', 'f', 'n', '0'):
         return False
     else:
-        raise argparse.ArgumentError(None, 'Value should be true/false, True/False or yes/no.')
+        raise argparse.ArgumentError(None, f'Value {v} should be true/false, True/False or yes/no.')
 
 
 def check_args(args):
