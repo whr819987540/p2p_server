@@ -134,6 +134,10 @@ def get_args():
         "--round_penalty", type=float, default=2.0, 
         help="In oort, round_penalty is used to penalize the clients' system utility if the clients' round completion time is longer than the round_prefer_duration. It's only valid in oort."
     )
+    parser.add_argument(
+        "--test_interval", type=int, default=5,
+        help="test interval"
+    )
     args = parser.parse_args()
     check_args(args)
 
