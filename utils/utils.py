@@ -302,6 +302,26 @@ def GetSpearmanCorrelationCoefficient():
     print("P-value:", p_value)
 
 
+def broadcast_unfixed_length_tensor(tensor: torch.Tensor, src: int, group: dist.group):
+    RANK, WORLD_SIZE = dist.get_rank(), dist.get_world_size()
+    if RANK == src:
+        if tensor is None:
+            raise ValueError
+        # size
+        size = torch.tensor([tensor.shape[0]], dtype=torch.int64)
+        dist.broadcast(size, src, group=group)
+        # data
+        dist.broadcast(tensor, src, group=group)
+    else:
+        # size
+        size = torch.empty(1, dtype=torch.int64)
+        dist.broadcast(size, src, group=group)
+        # data
+        tensor = torch.empty(size[0], dtype=torch.uint8)
+        dist.broadcast(tensor, src, group=group)
+
+    return tensor
+
 def load_client_profile():
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "client_device_capacity")
