@@ -130,6 +130,10 @@ def get_args():
         "--rate_limit", type=str2bool, default=False, 
         help="In simulation mode, whether to limit the upload and download rate. If it's True, the rate will be determined by the client's profile. It's only valid in simulation mode."
     )
+    parser.add_argument(
+        "--round_penalty", type=float, default=2.0, 
+        help="In oort, round_penalty is used to penalize the clients' system utility if the clients' round completion time is longer than the round_prefer_duration. It's only valid in oort."
+    )
     args = parser.parse_args()
     check_args(args)
 
