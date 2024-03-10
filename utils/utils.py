@@ -104,6 +104,14 @@ def get_args():
         "--exploration_proportion", type=float, default=0.5,
         help="Select # clients to explore their utilities, and exploit the remaining clients' utilities. Only valid when using oort as the client selection strategy."
     )
+    parser.add_argument(
+        "--exploration_proportion_decay", type=float, default=0.98,
+        help="After each round, exploration_proportion = exploration_proportion * exploration_proportion_decay. It's only valid in oort."
+    )
+    parser.add_argument(
+        "--exploration_proportion_min", type=float, default=0.2,
+        help="After each round, exploration_proportion decays. But it will not be smaller than exploration_proportion_min. It's only valid in oort."
+    )
     parser.add_argument("--use_gpu", type=str2bool, default=False,
                         help="use gpu or not. Default is False. In simulation mode, it's better to use cpu to simulate more clients as gpu memory is smaller than host memory.")
     parser.add_argument(
