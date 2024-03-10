@@ -11,6 +11,7 @@ model_dict = {
     "resnet101": models.resnet101, "resnet152": models.resnet152, 
     "lenet": LeNet,
     "cnn": CNN,
+    "shufflenet_v2_x2_0": models.shufflenet_v2_x2_0
 }
 
 
@@ -27,6 +28,8 @@ def get_model(model: Union[str, torch.nn.Module], dataset: str, num_classes: int
             model = model_dict[model_name]()
         elif model_name == "cnn":
             model = model_dict[model_name]()
+        elif model_name.startswith("shufflenet"):
+            model = model_dict[model_name](pretrained=False)
         else:
             raise ValueError
 
