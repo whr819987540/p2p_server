@@ -266,8 +266,9 @@ def split_dataset(dataset: Dataset, N: int, seed: int):
 
 
 def set_seed(seed: int = 0):
+    # https://pytorch.org/docs/stable/notes/randomness.html#pytorch-random-number-generator
+    # You can use torch.manual_seed() to seed the RNG for all devices (both CPU and CUDA):
     torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
     random.seed(seed)
     numpy.random.seed(seed)
 
