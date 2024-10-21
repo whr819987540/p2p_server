@@ -21,7 +21,7 @@ STANDALONE_MODE = "standalone"
 BTPS_TRANSFER_MODE = "BTPS"
 PS_TRANSFER_MODE = "PS"
 
-FEDAVG_STRATEGY = "fedavg" # random selection
+RANDOM_STRATEGY = "random" # random selection
 OORT_STRATEGY = "oort"
 FedP2P_STRATEGY = "fedp2p"
 
