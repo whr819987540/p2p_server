@@ -12,6 +12,7 @@ from scipy import stats
 from datetime import datetime
 from torch.utils.data import Dataset, DataLoader
 from torch import distributed as dist
+from enum import Enum
 
 from p2p_server.rpc.rpc_client import readJsonc, loadConfig, to_namespace
 
@@ -21,9 +22,10 @@ STANDALONE_MODE = "standalone"
 BTPS_TRANSFER_MODE = "BTPS"
 PS_TRANSFER_MODE = "PS"
 
-RANDOM_STRATEGY = "random" # random selection
-OORT_STRATEGY = "oort"
-FedP2P_STRATEGY = "fedp2p"
+class ClientSelectionType(Enum):
+    RANDOM_STRATEGY = "random" # random selection
+    OORT_STRATEGY = "oort"
+    FedP2P_STRATEGY = "fedp2p"
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -94,8 +96,8 @@ def get_args():
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
     parser.add_argument("--client_selection", type=str2bool, default=False,
                         help="use client selection or not. Default is False.")
-    parser.add_argument("--client_selection_strategy", type=str, default="fedavg",
-                        choices=[FEDAVG_STRATEGY, OORT_STRATEGY, FedP2P_STRATEGY],
+    parser.add_argument("--client_selection_strategy", type=str, default="random",
+                        choices=[ClientSelectionType.RANDOM_STRATEGY.value, ClientSelectionType.OORT_STRATEGY.value, ClientSelectionType.FedP2P_STRATEGY.value],
                         help="client selection strategy. Default is fedavg.")
     parser.add_argument("--selected_clients_number", type=int, default=-1,
                         help="number of selected clients in each iteration.")
