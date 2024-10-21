@@ -27,6 +27,10 @@ class ClientSelectionType(Enum):
     OORT_STRATEGY = "oort"
     FedP2P_STRATEGY = "fedp2p"
 
+class AggregateType(Enum):
+    FEDAVG_STRATEGY = "fedavg"
+    FEDPROX_STRATEGY = "fedprox"
+
 def str2bool(v):
     if isinstance(v, bool):
         return v
@@ -91,6 +95,11 @@ def get_args():
     parser.add_argument("--running_mode", type=str, default=SIMULATION_MODE, 
                         choices=[SIMULATION_MODE, STANDALONE_MODE],
                         help="set the running mode. simulation and standalone are available.")
+    parser.add_argument(
+        "--gradient_policy", type=str, default="fedavg",
+        choices=[AggregateType.FEDAVG_STRATEGY.value, AggregateType.FEDPROX_STRATEGY.value],
+        help="client optimization strategy. Default is fedavg."
+    )
     parser.add_argument("--transfer_mode", type=str, default=BTPS_TRANSFER_MODE, 
                         choices=[BTPS_TRANSFER_MODE, PS_TRANSFER_MODE],
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
