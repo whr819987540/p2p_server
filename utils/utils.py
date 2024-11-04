@@ -7,6 +7,7 @@ import numpy
 import json
 import logging
 import pickle
+import base64
 from scipy import stats
 
 from io import BytesIO
@@ -408,6 +409,21 @@ def state_dict_base64_encode(state_dict):
     s += b'=' * (-len(s) % 4)
     encoded = s.decode('utf-8')
     return encoded
+
+
+def padding_base64_str(data):
+    padding_needed = len(data) % 4
+    if padding_needed != 0:
+        padding = '=' * (4 - padding_needed)
+        data += padding
+    return data
+
+
+def state_dict_base64_decode(encoded_state_dict):
+    encoded_state_dict = padding_base64_str(encoded_state_dict)
+    state_dict_binary = base64.b64decode(encoded_state_dict)
+    state_dict = torch.load(BytesIO(state_dict_binary))
+    return state_dict
 
 
 if __name__ == "__main__":
