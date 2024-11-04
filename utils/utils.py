@@ -166,6 +166,10 @@ def get_args():
         "--test_interval", type=int, default=5,
         help="test interval"
     )
+    parser.add_argument(
+        "--measure_rpc_server_overhead", type=str2bool, default=False,
+        help="measure the rpc server (P2P) cpu and memory overhead"
+    )
     args = parser.parse_args()
     check_args(args)
 
