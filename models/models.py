@@ -48,6 +48,21 @@ def get_model(model: Union[str, torch.nn.Module], dataset: str, num_classes: int
             elif model_name == "resnet152":
                 dimension = 2048
             model.fc = torch.nn.Linear(dimension, num_classes)
+        elif model_name.startswith("resnet") and dataset == "google_speech_commands":
+            # 修改第一个卷积层,以适应CIFAR-10输入
+            model.conv1 = torch.nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1, bias=False)
+            # 修改最后一层全连接层,以适应10分类
+            if model_name == "resnet18":
+                dimension = 512
+            elif model_name == "resnet34":
+                dimension = 512
+            elif model_name == "resnet50":
+                dimension = 2048
+            elif model_name == "resnet101":
+                dimension = 2048
+            elif model_name == "resnet152":
+                dimension = 2048
+            model.fc = torch.nn.Linear(dimension, 35)
         elif model_name.startswith("resnet") and dataset == "mnist":
             model.conv1 = torch.nn.Conv2d(1, 64, (7, 7), (2, 2), (3, 3), bias=False)
         # elif model_name
