@@ -103,6 +103,10 @@ def get_args():
         choices=[AggregateType.FEDAVG_STRATEGY.value, AggregateType.FEDPROX_STRATEGY.value],
         help="client optimization strategy. Default is fedavg."
     )
+    parser.add_argument(
+        "--quick_simulate", type=str2bool, default=False, 
+        help="quick simulation"
+    )
     parser.add_argument("--transfer_mode", type=str, default=BTPS_TRANSFER_MODE, 
                         choices=[BTPS_TRANSFER_MODE, PS_TRANSFER_MODE],
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
