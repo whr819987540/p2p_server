@@ -118,6 +118,10 @@ def get_args():
                         help="client selection strategy. Default is fedavg.")
     parser.add_argument("--selected_clients_number", type=int, default=-1,
                         help="number of selected clients in each iteration.")
+    parser.add_argument(
+        "--over_commitment", type=float, default=1.3,
+        help="Select extra clients."
+    )
     parser.add_argument("--selected_clients_proportion", type=float, default=0,
                         help="proportion of selected clients in each iteration.")
     parser.add_argument(
