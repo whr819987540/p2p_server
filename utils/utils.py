@@ -9,13 +9,13 @@ import logging
 import pickle
 import base64
 import subprocess
-from scipy import stats
 
 from io import BytesIO
 from datetime import datetime
 from torch.utils.data import Dataset, DataLoader
 from torch import distributed as dist
 from enum import Enum
+from scipy import stats
 
 from p2p_server.rpc.rpc_client import readJsonc, loadConfig, to_namespace
 
