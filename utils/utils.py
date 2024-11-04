@@ -155,6 +155,10 @@ def get_args():
         help="In oort, round_penalty is used to penalize the clients' system utility if the clients' round completion time is longer than the round_prefer_duration. It's only valid in oort."
     )
     parser.add_argument(
+        "--beta", type=float, default=1.0, 
+        help="upload contribution factor"
+    )
+    parser.add_argument(
         "--test_interval", type=int, default=5,
         help="test interval"
     )
