@@ -99,6 +99,7 @@ def get_args():
     parser.add_argument("--running_mode", type=str, default=SIMULATION_MODE, 
                         choices=[SIMULATION_MODE, STANDALONE_MODE],
                         help="set the running mode. simulation and standalone are available.")
+    parser.add_argument('--fedprox_mu', type=float, default=0.1)
     parser.add_argument(
         "--gradient_policy", type=str, default="fedavg",
         choices=[AggregateType.FEDAVG_STRATEGY.value, AggregateType.FEDPROX_STRATEGY.value],
