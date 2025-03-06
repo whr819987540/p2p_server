@@ -440,6 +440,14 @@ def state_dict_base64_encode(state_dict):
     return encoded
 
 
+def padding_base64_str(data):
+    padding_needed = len(data) % 4
+    if padding_needed != 0:
+        padding = '=' * (4 - padding_needed)
+        data += padding
+    return data
+
+
 if __name__ == "__main__":
     args = get_args()
     print(args)
