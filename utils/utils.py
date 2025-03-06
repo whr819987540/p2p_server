@@ -8,6 +8,7 @@ import json
 import logging
 import pickle
 from scipy import stats
+import subprocess
 
 from datetime import datetime
 from torch.utils.data import Dataset, DataLoader
@@ -282,6 +283,38 @@ def set_seed(seed: int = 0):
     torch.manual_seed(seed)
     random.seed(seed)
     numpy.random.seed(seed)
+
+
+def rate_limit(RANK, client_profile, logger, limit:bool=True):
+    if not limit:
+        return
+    
+    # max 204056.74594524835, min 1016.8808511071711
+    # TODO: so far, upload rate equals to download rate
+    # TODO: upload rate and download rate should be different.
+    UPLOAD_RATE = int(client_profile['communication']) # kbit
+    BURST_VALUE_SEND = int(UPLOAD_RATE * 1024. / 10 / 8) # Bytes
+    if RANK == 0:
+        DOWNLOAD_RATE = int(client_profile['communication']) # kbit
+    else:
+        DOWNLOAD_RATE = int(client_profile['communication']) # kbit
+    
+    # 环境变量
+    os.environ['UPLOAD_RATE'] = f"{UPLOAD_RATE}kbit"
+    os.environ['DOWNLOAD_RATE'] = f"{DOWNLOAD_RATE}kbit"
+    os.environ['BURST_VALUE_SEND'] = f"{BURST_VALUE_SEND}"
+    env_vars = os.environ.copy()
+    logger.info(f"environ variables: {env_vars}")
+
+    # 执行限速
+    # 先取消限速，再限速
+    command = f"/bin/bash $WORKDIR/docker_rate_limit.sh --del"
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env_vars)
+    logger.info(f"del rate limit result: {result.stdout}")
+    
+    command = f"/bin/bash $WORKDIR/docker_rate_limit.sh"
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env_vars)
+    logger.info(f"rate limit result: {result.stdout}")
 
 
 def GetPearsonCorrelationCoefficient():
