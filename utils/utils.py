@@ -7,9 +7,11 @@ import numpy
 import json
 import logging
 import pickle
-from scipy import stats
 import subprocess
+import base64
 
+from scipy import stats
+from io import BytesIO
 from datetime import datetime
 from torch.utils.data import Dataset, DataLoader
 from torch import distributed as dist
@@ -423,6 +425,19 @@ def calculate_statistical_utility(losses: torch.Tensor, sample_number) -> float:
         $|B_i| \sqrt {\\frac {1}{|B_i|} \sum _{k\in{B_i}} {LOSS(k)^2}}$
     """
     return sample_number * torch.sqrt(torch.sum(torch.pow(losses, 2)) / losses.shape[0]).item()
+
+
+def state_dict_base64_encode(state_dict):
+    """
+        dict -> bytes -> base64 bytes -> utf-8 string
+    """
+    buffer = BytesIO()
+    torch.save(state_dict, buffer)
+    # encoded = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    s = base64.b64encode(buffer.getvalue())
+    s += b'=' * (-len(s) % 4)
+    encoded = s.decode('utf-8')
+    return encoded
 
 
 if __name__ == "__main__":
