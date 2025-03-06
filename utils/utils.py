@@ -458,6 +458,25 @@ def state_dict_base64_decode(encoded_state_dict):
     return state_dict
 
 
+def top_K_accuracy_pytorch(y_pred_probs, y_true, K:int=1):
+    """
+    :param y_pred_probs: Tensor of predicted probabilities for each class
+    :param y_true: Tensor of true labels
+
+    :return: number of correctly-predicted samples
+    """
+    _, top_K_preds = torch.topk(y_pred_probs, K, dim=1, largest=True, sorted=True)
+
+    # Check if the true labels are in the top 5 predictions
+    correct_predictions = (
+        torch.any(top_K_preds == y_true.unsqueeze(1), dim=1).float().sum().item()
+    )
+
+    top_K_accuracy = correct_predictions
+
+    return top_K_accuracy
+
+
 if __name__ == "__main__":
     args = get_args()
     print(args)
