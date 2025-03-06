@@ -448,6 +448,16 @@ def padding_base64_str(data):
     return data
 
 
+def state_dict_base64_decode(encoded_state_dict):
+    """
+        utf-8 string -> base64 bytes -> bytes -> dict
+    """
+    encoded_state_dict = padding_base64_str(encoded_state_dict)
+    state_dict_binary = base64.b64decode(encoded_state_dict)
+    state_dict = torch.load(BytesIO(state_dict_binary))
+    return state_dict
+
+
 if __name__ == "__main__":
     args = get_args()
     print(args)
