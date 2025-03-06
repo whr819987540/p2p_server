@@ -16,6 +16,7 @@ from datetime import datetime
 from torch.utils.data import Dataset, DataLoader
 from torch import distributed as dist
 from enum import Enum
+from scipy import stats
 
 from p2p_server.rpc.rpc_client import readJsonc, loadConfig, to_namespace
 
@@ -103,6 +104,11 @@ def get_args():
         choices=[AggregateType.FEDAVG_STRATEGY.value, AggregateType.FEDPROX_STRATEGY.value],
         help="client optimization strategy. Default is fedavg."
     )
+    parser.add_argument(
+        "--quick_simulate", type=str2bool, default=False, 
+        help="quick simulation"
+    )
+    parser.add_argument('--proxy_mu', type=float, default=0.1)
     parser.add_argument("--transfer_mode", type=str, default=BTPS_TRANSFER_MODE, 
                         choices=[BTPS_TRANSFER_MODE, PS_TRANSFER_MODE],
                         help="set the transfer mode. 1) PS using torch.distributed 2) BTPS using torch.distributed to transfer control message and bit-torrent to transfer data.")
@@ -113,6 +119,10 @@ def get_args():
                         help="client selection strategy. Default is fedavg.")
     parser.add_argument("--selected_clients_number", type=int, default=-1,
                         help="number of selected clients in each iteration.")
+    parser.add_argument(
+        "--over_commitment", type=float, default=1.3,
+        help="Select extra clients."
+    )
     parser.add_argument("--selected_clients_proportion", type=float, default=0,
                         help="proportion of selected clients in each iteration.")
     parser.add_argument(
@@ -150,8 +160,16 @@ def get_args():
         help="In oort, round_penalty is used to penalize the clients' system utility if the clients' round completion time is longer than the round_prefer_duration. It's only valid in oort."
     )
     parser.add_argument(
+        "--beta", type=float, default=1.0, 
+        help="upload contribution factor"
+    )
+    parser.add_argument(
         "--test_interval", type=int, default=5,
         help="test interval"
+    )
+    parser.add_argument(
+        "--measure_rpc_server_overhead", type=str2bool, default=False,
+        help="measure the rpc server (P2P) cpu and memory overhead"
     )
     args = parser.parse_args()
     check_args(args)
@@ -181,7 +199,7 @@ def get_logger(args, name):
     return logger
 
 
-def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model: str, dataset: str):
+def get_updated_config_file(master_addr: str, master_port: int, model: str, dataset: str):
     """
         load dict object from jsonc
         
@@ -214,7 +232,7 @@ def get_updated_config_file(RANK:int, master_addr: str, master_port: int, model:
 
 def update_config_file(RANK: int, master_addr: str, master_port: int, model: str, dataset: str, logger: logging.Logger):
     if RANK == 0:
-        config, json_config_path = get_updated_config_file(RANK, master_addr, master_port, model, dataset)
+        config, json_config_path = get_updated_config_file(master_addr, master_port, model, dataset)
         with open(json_config_path, 'w') as f:
             f.write(json.dumps(config))
 

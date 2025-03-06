@@ -1,6 +1,7 @@
+import torch
+
 from torchvision import models
 from typing import Union
-import torch
 
 from p2p_server.models.lenet import LeNet
 from p2p_server.models.cnn import CNN
